@@ -25,7 +25,7 @@ class _RootScreenState extends State<RootScreen> {
   ];
 
   final List<String> _titles = const [
-    'Dashboard',
+    'Home',
     'Purchase Order',
     'Work Management',
   ];
@@ -147,7 +147,7 @@ class _RootScreenState extends State<RootScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),

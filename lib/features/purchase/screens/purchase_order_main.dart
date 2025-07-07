@@ -58,132 +58,217 @@ class _PurchaseOrderMainScreenState extends State<PurchaseOrderMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0.h),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search by PO name or number...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade50,
+        body: SafeArea(
+        child: Column(
+          children: [
+            // Header Section
+            Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
-                ),
+                ],
               ),
-              SizedBox(height: 16.h),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(filters.length, (index) {
-                    final selected = index == _selectedTab;
-                    return Padding(
-                      padding: EdgeInsets.only(right: 8.w),
-                      child: ChoiceChip(
-                        label: Text(filters[index]),
-                        selected: selected,
-                        onSelected: (_) => setState(() => _selectedTab = index),
-                        selectedColor: Colors.blue,
-                        labelStyle: TextStyle(
-                          color: selected ? Colors.white : Colors.black,
-                        ),
+              child: Column(
+                children: [
+                  // Search Bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search by PO name or number...',
+                        hintStyle: TextStyle(color: Colors.grey.shade600),
+                        prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(16.w),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+
+                  // Filter Chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(filters.length, (index) {
+                        final selected = index == _selectedTab;
+                        return Padding(
+                          padding: EdgeInsets.only(right: 8.w),
+                          child: FilterChip(
+                            label: Text(filters[index]),
+                            selected: selected,
+                            onSelected: (_) => setState(() => _selectedTab = index),
+                            selectedColor: Colors.blue.shade100,
+                            backgroundColor: Colors.grey.shade100,
+                            labelStyle: TextStyle(
+                              color: selected ? Colors.blue.shade700 : Colors.grey.shade700,
+                              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 16.h),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _poList.length,
-                  itemBuilder: (context, index) {
-                    final po = _poList[index];
-                    return Card(
-                      margin: EdgeInsets.only(bottom: 12.h),
-                      child: Padding(
-                        padding: EdgeInsets.all(12.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+
+            // PO List
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.all(16.w),
+                itemCount: _poList.length,
+                itemBuilder: (context, index) {
+                  final po = _poList[index];
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 16.h),
+                    padding: EdgeInsets.all(16.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.05),
+                          spreadRadius: 1,
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    po['number'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.sp,
+                                      color: Colors.grey.shade800,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    po['company'],
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        po['number'],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                      Text(
-                                        po['company'],
-                                        style: TextStyle(fontSize: 12.sp),
-                                      ),
-                                    ],
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                  decoration: BoxDecoration(
+                                    color: po['statusColor'].withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  child: Text(
+                                    po['status'],
+                                    style: TextStyle(
+                                      color: po['statusColor'],
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
-                                Column(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                      decoration: BoxDecoration(
-                                        color: po['statusColor'].withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12.r),
-                                      ),
-                                      child: Text(
-                                        po['status'],
-                                        style: TextStyle(
-                                          color: po['statusColor'],
-                                          fontSize: 12.sp,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.h),
-                                    Text(
-                                      po['date'],
-                                      style: TextStyle(fontSize: 10.sp, color: Colors.grey),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 12.h),
-                            Text(
-                              po['amount'],
-                              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 12.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('View Details'),
-                                  ),
-                                ),
-                                SizedBox(width: 8.w),
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () {},
-                                    child: const Text('Work Summary'),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  po['date'],
+                                  style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: Colors.grey.shade400,
                                   ),
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        SizedBox(height: 12.h),
+
+                        // Amount
+                        Text(
+                          po['amount'],
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade800,
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Action Buttons
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                icon: Icon(Icons.remove_red_eye, size: 16.sp),
+                                label: Text('View Details', style: TextStyle(fontSize: 12.sp)),
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.shade600,
+                                  foregroundColor: Colors.white,
+                                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                icon: Icon(Icons.summarize, size: 16.sp),
+                                label: Text('Summary', style: TextStyle(fontSize: 12.sp)),
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.blue.shade600,
+                                  side: BorderSide(color: Colors.blue.shade600),
+                                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
         ),
       ),
     );
