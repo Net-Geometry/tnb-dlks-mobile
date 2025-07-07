@@ -34,7 +34,7 @@ class WorkManagementScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisSpacing: 12.w,
                       mainAxisSpacing: 12.h,
-                      childAspectRatio: 1.6,
+                      childAspectRatio: 1.8, // Increased aspect ratio for more height
                       children: [
                         _summaryBox('Total', '12', Icons.assignment_outlined, Colors.blue),
                         _summaryBox('Issued', '5', Icons.insert_drive_file_outlined, Colors.orange),
@@ -67,59 +67,142 @@ class WorkManagementScreen extends StatelessWidget {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         bool isTablet = constraints.maxWidth > 600;
-                        return Row(
-                          children: [
-                            Expanded(
-                              flex: isTablet ? 2 : 1,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  border: Border.all(color: Colors.grey.shade200),
-                                ),
-                                child: DropdownButtonFormField<String>(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'All Types',
+                        if (isTablet) {
+                          // Tablet layout - all in one row
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(8.r),
+                                    border: Border.all(color: Colors.grey.shade200),
                                   ),
-                                  items: const [],
-                                  onChanged: (_) {},
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              flex: isTablet ? 2 : 1,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  border: Border.all(color: Colors.grey.shade200),
-                                ),
-                                child: DropdownButtonFormField<String>(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'All Status',
+                                  child: DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'All Types',
+                                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                    ),
+                                    items: const [],
+                                    onChanged: (_) {},
                                   ),
-                                  items: const [],
-                                  onChanged: (_) {},
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 8.w),
-                            Container(
-                              padding: EdgeInsets.all(12.w),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(color: Colors.blue.shade200),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(8.r),
+                                    border: Border.all(color: Colors.grey.shade200),
+                                  ),
+                                  child: DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'All Status',
+                                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                    ),
+                                    items: const [],
+                                    onChanged: (_) {},
+                                  ),
+                                ),
                               ),
-                              child: Icon(Icons.download, color: Colors.blue.shade600),
-                            ),
-                          ],
-                        );
+                              SizedBox(width: 8.w),
+                              Container(
+                                padding: EdgeInsets.all(10.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  border: Border.all(color: Colors.blue.shade200),
+                                ),
+                                child: Icon(Icons.download, color: Colors.blue.shade600, size: 20.sp),
+                              ),
+                            ],
+                          );
+                        } else {
+                          // Mobile layout - stacked layout for better fit
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade50,
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        border: Border.all(color: Colors.grey.shade200),
+                                      ),
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'All Types',
+                                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                        ),
+                                        items: const [],
+                                        onChanged: (_) {},
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade50,
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        border: Border.all(color: Colors.grey.shade200),
+                                      ),
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'All Status',
+                                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                        ),
+                                        items: const [],
+                                        onChanged: (_) {},
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.h),
+                              Row(
+                                children: [
+                                  Expanded(child: Container()), // Spacer
+                                  Container(
+                                    padding: EdgeInsets.all(10.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.shade50,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      border: Border.all(color: Colors.blue.shade200),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.download, color: Colors.blue.shade600, size: 16.sp),
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          'Export',
+                                          style: TextStyle(
+                                            color: Colors.blue.shade600,
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
                       },
                     ),
                   ],
@@ -156,12 +239,12 @@ class WorkManagementScreen extends StatelessWidget {
 
   double _getChildAspectRatio(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return screenWidth > 600 ? 1.2 : 0.7; // Different aspect ratios for tablet vs mobile
+    return screenWidth > 600 ? 1.0 : 0.8; // Adjusted ratios for better layout
   }
 
   Widget _summaryBox(String title, String count, IconData icon, Color color) {
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
@@ -184,28 +267,30 @@ class WorkManagementScreen extends StatelessWidget {
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Icon(icon, color: color, size: 20.sp),
+            child: Icon(icon, color: color, size: 18.sp),
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 4.h),
           Text(
             count,
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
           SizedBox(height: 2.h),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 10.sp,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
+          Flexible(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 9.sp,
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -306,34 +391,37 @@ class WorkManagementScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade800,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              SizedBox(width: 4.w),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                 decoration: BoxDecoration(
                   color: (data['typeColor'] as Color).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
                   data['type'] as String,
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 9.sp,
                     color: data['typeColor'] as Color,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: 4.w),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                 decoration: BoxDecoration(
                   color: (data['statusColor'] as Color).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
                   data['status'] as String,
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 9.sp,
                     color: data['statusColor'] as Color,
                     fontWeight: FontWeight.w600,
                   ),
@@ -394,6 +482,8 @@ class WorkManagementScreen extends StatelessWidget {
                 color: Colors.grey.shade700,
                 height: 1.3,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
